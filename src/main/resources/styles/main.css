@@ -1,0 +1,84 @@
+/* ===== Main CSS for CPU Scheduler Comparison ===== */
+
+/* ScrollBar */
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #585b70;
+    -fx-background-radius: 4;
+}
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: #313244;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #45475a;
+    -fx-border-radius: 6;
+}
+.table-view .column-header-background {
+    -fx-background-color: #313244;
+}
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: #313244;
+    -fx-border-color: #45475a;
+    -fx-text-fill: #cdd6f4;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #cdd6f4;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.table-row-cell {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #313244;
+    -fx-text-fill: #cdd6f4;
+}
+.table-row-cell:odd {
+    -fx-background-color: #24273a;
+}
+.table-row-cell:selected {
+    -fx-background-color: #45475a;
+}
+.table-row-cell:hover {
+    -fx-background-color: #313244;
+}
+
+/* TextField */
+.text-field {
+    -fx-background-color: #45475a;
+    -fx-text-fill: #cdd6f4;
+    -fx-border-color: #585b70;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-prompt-text-fill: #6c7086;
+}
+.text-field:focused {
+    -fx-border-color: #89b4fa;
+}
+
+/* Alert */
+.dialog-pane {
+    -fx-background-color: #313244;
+}
+.dialog-pane .content.label {
+    -fx-text-fill: #cdd6f4;
+}
+.dialog-pane .header-panel {
+    -fx-background-color: #1e1e2e;
+}
+.dialog-pane .button {
+    -fx-background-color: #45475a;
+    -fx-text-fill: #cdd6f4;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
