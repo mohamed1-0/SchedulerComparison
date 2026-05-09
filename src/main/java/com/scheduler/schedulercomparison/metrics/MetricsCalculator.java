@@ -4,10 +4,6 @@ import com.scheduler.schedulercomparison.model.Process;
 
 import java.util.List;
 
-/**
- * بتحسب المقاييس (Metrics) بعد ما الخوارزمية تخلص
- * WT, TAT, RT لكل process + المتوسطات
- */
 public class MetricsCalculator {
 
     private List<Process> processes;
@@ -16,7 +12,6 @@ public class MetricsCalculator {
         this.processes = processes;
     }
 
-    // ========== Average Waiting Time ==========
     public double getAverageWaitingTime() {
         double total = 0;
         for (Process p : processes) {
@@ -25,7 +20,6 @@ public class MetricsCalculator {
         return total / processes.size();
     }
 
-    // ========== Average Turnaround Time ==========
     public double getAverageTurnaroundTime() {
         double total = 0;
         for (Process p : processes) {
@@ -34,7 +28,6 @@ public class MetricsCalculator {
         return total / processes.size();
     }
 
-    // ========== Average Response Time ==========
     public double getAverageResponseTime() {
         double total = 0;
         for (Process p : processes) {
@@ -43,8 +36,6 @@ public class MetricsCalculator {
         return total / processes.size();
     }
 
-    // ========== CPU Utilization ==========
-    // نسبة الوقت اللي الـ CPU كانت شغالة فيه
     public double getCpuUtilization() {
         int totalBurst = 0;
         int totalTime = 0;
@@ -58,8 +49,6 @@ public class MetricsCalculator {
         return ((double) totalBurst / totalTime) * 100;
     }
 
-    // ========== Throughput ==========
-    // عدد الـ processes اللي خلصت في وحدة الوقت
     public double getThroughput() {
         int totalTime = 0;
         for (Process p : processes) {
@@ -69,7 +58,6 @@ public class MetricsCalculator {
         return (double) processes.size() / totalTime;
     }
 
-    // ========== Summary String ==========
     public String getSummary() {
         return String.format(
                 "Avg WT: %.2f | Avg TAT: %.2f | Avg RT: %.2f | CPU: %.1f%% | Throughput: %.3f",

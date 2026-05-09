@@ -3,6 +3,7 @@ package com.scheduler.schedulercomparison.gui;
 import com.scheduler.schedulercomparison.metrics.MetricsCalculator;
 import com.scheduler.schedulercomparison.model.GanttEntry;
 import com.scheduler.schedulercomparison.model.Process;
+import com.scheduler.schedulercomparison.scheduler.NonPreemptivePriorityScheduler;
 import com.scheduler.schedulercomparison.scheduler.PriorityScheduler;
 import com.scheduler.schedulercomparison.scheduler.RoundRobinScheduler;
 
@@ -21,6 +22,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,8 @@ public class MainView {
     private TableView<ProcessRow> inputTable;
     private ObservableList<ProcessRow> tableData;
     private TextField quantumField;
+    private RadioButton preemptiveRB;
+    private RadioButton nonPreemptiveRB;
     private final VBox resultsSection = new VBox(20);
 
     private static final String[] COLORS = {
@@ -89,6 +95,7 @@ public class MainView {
                 editableColumn("Priority",     "priority",    120)
         );
 
+        // ===== Quantum Field =====
         HBox qBox = new HBox(10);
         qBox.setAlignment(Pos.CENTER_LEFT);
         Text qLbl = styledText("Time Quantum (Round Robin):", "#cdd6f4", 13, false);
@@ -97,10 +104,33 @@ public class MainView {
         quantumField.setStyle("-fx-background-color:#45475a;-fx-text-fill:#cdd6f4;");
         qBox.getChildren().addAll(qLbl, quantumField);
 
+        // ===== Priority Mode Radio Buttons =====
+        HBox radioBox = new HBox(15);
+        radioBox.setAlignment(Pos.CENTER_LEFT);
+        radioBox.setPadding(new Insets(5, 0, 0, 0));
+
+        Text radioLbl = styledText("Priority Mode:", "#cdd6f4", 13, false);
+
+        ToggleGroup priorityGroup = new ToggleGroup();
+
+        preemptiveRB = new RadioButton("Preemptive");
+        preemptiveRB.setToggleGroup(priorityGroup);
+        preemptiveRB.setSelected(true);
+        preemptiveRB.setStyle("-fx-text-fill: #cdd6f4;");
+
+        nonPreemptiveRB = new RadioButton("Non-Preemptive");
+        nonPreemptiveRB.setToggleGroup(priorityGroup);
+        nonPreemptiveRB.setStyle("-fx-text-fill: #cdd6f4;");
+
+        Text hint = styledText("← Lower number = Higher Priority", "#a6adc8", 11, false);
+
+        radioBox.getChildren().addAll(radioLbl, preemptiveRB, nonPreemptiveRB, hint);
+
         box.getChildren().addAll(
                 styledText("Process Input", "#cdd6f4", 16, true),
-                inputTable, qBox
+                inputTable, qBox, radioBox
         );
+
         return box;
     }
 
@@ -216,7 +246,6 @@ public class MainView {
                 styledText(description, "#a6adc8", 12, false)
         );
 
-        // Data Table
         GridPane grid = new GridPane();
         grid.setHgap(20);
         grid.setVgap(5);
@@ -230,10 +259,8 @@ public class MainView {
             for (int j = 0; j < data[i].length; j++)
                 grid.add(styledText(data[i][j], "#a6adc8", 11, false), j, i + 1);
 
-        // Quantum info
         Text qText = styledText("Time Quantum = " + quantum, "#89b4fa", 12, true);
 
-        // Load Button
         Button loadBtn = btn("📥 Load This Scenario", color);
         loadBtn.setOnAction(e -> {
             tableData.clear();
@@ -271,13 +298,22 @@ public class MainView {
 
         // Priority
         List<Process> prP = clone(base);
-        List<GanttEntry> prG = new PriorityScheduler().schedule(prP);
+        List<GanttEntry> prG;
+        String priorityTitle;
+
+        if (nonPreemptiveRB.isSelected()) {
+            prG = new NonPreemptivePriorityScheduler().schedule(prP);
+            priorityTitle = "🔴  Priority Scheduling  (Non-Preemptive)";
+        } else {
+            prG = new PriorityScheduler().schedule(prP);
+            priorityTitle = "🔴  Priority Scheduling  (Preemptive)";
+        }
         MetricsCalculator prM = new MetricsCalculator(prP);
 
         resultsSection.getChildren().addAll(
                 ganttSection("🔵  Round Robin  (Quantum = "+q+")", rrG),
                 metricsTable("Round Robin — Metrics", rrP, rrM),
-                ganttSection("🔴  Priority Scheduling  (Preemptive)", prG),
+                ganttSection(priorityTitle, prG),
                 metricsTable("Priority — Metrics", prP, prM),
                 comparisonTable(rrM, prM, rrP, prP)        );
     }
@@ -475,7 +511,6 @@ public class MainView {
         return box;
     }
 
-    // ───────────────────────────── Helpers ────────────────────────────
     private void loadSample() {
         tableData.clear();
         tableData.addAll(

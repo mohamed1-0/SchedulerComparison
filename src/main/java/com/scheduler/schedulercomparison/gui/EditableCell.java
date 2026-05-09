@@ -3,10 +3,6 @@ package com.scheduler.schedulercomparison.gui;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 
-/**
- * Cell قابل للتعديل في الـ TableView
- * بيخلي المستخدم يضغط على أي خانة ويغير قيمتها
- */
 public class EditableCell extends TableCell<ProcessRow, String> {
 
     private TextField textField;
@@ -53,10 +49,8 @@ public class EditableCell extends TableCell<ProcessRow, String> {
         textField.setStyle("-fx-background-color: #45475a; -fx-text-fill: #cdd6f4;");
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
 
-        // لما يضغط Enter يحفظ
         textField.setOnAction(e -> commitEdit(textField.getText()));
 
-        // لما يخرج من الـ cell يحفظ
         textField.focusedProperty().addListener((obs, wasF, isF) -> {
             if (!isF) commitEdit(textField.getText());
         });

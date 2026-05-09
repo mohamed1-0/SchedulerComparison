@@ -2,10 +2,6 @@ package com.scheduler.schedulercomparison.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 
-/**
- * بتمثل صف واحد في الـ TableView
- * JavaFX بتحتاج SimpleStringProperty عشان الـ Table تشتغل صح
- */
 public class ProcessRow {
 
     private final SimpleStringProperty id;
@@ -13,7 +9,6 @@ public class ProcessRow {
     private final SimpleStringProperty burstTime;
     private final SimpleStringProperty priority;
 
-    // للـ Results
     private final SimpleStringProperty completionTime;
     private final SimpleStringProperty turnaroundTime;
     private final SimpleStringProperty waitingTime;
@@ -30,7 +25,6 @@ public class ProcessRow {
         this.responseTime   = new SimpleStringProperty("-");
     }
 
-    // ===== Getters =====
     public String getId()             { return id.get(); }
     public String getArrivalTime()    { return arrivalTime.get(); }
     public String getBurstTime()      { return burstTime.get(); }
@@ -40,7 +34,6 @@ public class ProcessRow {
     public String getWaitingTime()    { return waitingTime.get(); }
     public String getResponseTime()   { return responseTime.get(); }
 
-    // ===== Setters =====
     public void setId(String v)             { id.set(v); }
     public void setArrivalTime(String v)    { arrivalTime.set(v); }
     public void setBurstTime(String v)      { burstTime.set(v); }
@@ -50,7 +43,6 @@ public class ProcessRow {
     public void setWaitingTime(String v)    { waitingTime.set(v); }
     public void setResponseTime(String v)   { responseTime.set(v); }
 
-    // ===== Property Getters (مهمة للـ TableView) =====
     public SimpleStringProperty idProperty()             { return id; }
     public SimpleStringProperty arrivalTimeProperty()    { return arrivalTime; }
     public SimpleStringProperty burstTimeProperty()      { return burstTime; }
