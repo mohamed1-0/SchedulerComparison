@@ -110,6 +110,6 @@ Result:  ✅ PASS
 ### Test 3.6: Negative Arrival Time
 ```
 Input:  P1, -1, 5, 1
-Expected: Error — "Arrival Time must be >= 0"
+Expected: Error — "Arrival Time for P1 must be a non-negative integer."
 Result:  ✅ PASS
 ```
