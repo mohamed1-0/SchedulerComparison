@@ -170,62 +170,100 @@ public class MainView {
         root.setPadding(new Insets(20));
         root.setStyle("-fx-background-color: #1e1e2e;");
 
-        root.getChildren().add(styledText("🧪  Required Test Scenarios", "#cba6f7", 18, true));
+        root.getChildren().add(styledText("Required Test Scenarios", "#cba6f7", 18, true));
 
-        // ===== Scenario 1: Normal Case =====
-        VBox s1 = scenarioCard(
-                "Scenario 1 — Normal Case",
+        // ===== Scenario A: Basic Mixed Workload =====
+        VBox sA = scenarioCard(
+                "Scenario A — Basic Mixed Workload",
                 "#a6e3a1",
-                "Tests basic scheduling with 5 processes having different arrival times,\n" +
-                        "burst times, and priorities. Verifies correct WT, TAT, and RT calculation.",
+                "A normal workload with 5 processes having different arrival times,\n" +
+                        "burst times, and priorities.\n" +
+                        "Used to verify correct WT, TAT, and RT calculation for both algorithms.",
                 new String[][]{
-                        {"P1","0","8","2"},
-                        {"P2","1","4","1"},
-                        {"P3","2","9","3"},
-                        {"P4","3","5","2"},
-                        {"P5","4","2","4"}
+                        {"P1", "0", "8", "2"},
+                        {"P2", "1", "4", "1"},
+                        {"P3", "2", "9", "3"},
+                        {"P4", "3", "5", "2"},
+                        {"P5", "4", "2", "4"}
                 },
                 "3"
         );
 
-        // ===== Scenario 2: Behavior-Revealing Case =====
-        VBox s2 = scenarioCard(
-                "Scenario 2 — Behavior-Revealing Case (Priority vs Fairness)",
+        // ===== Scenario B: Urgency Case =====
+        VBox sB = scenarioCard(
+                "Scenario B — Urgency Case",
                 "#f9e2af",
-                "Shows conflict between short burst time and high priority.\n" +
-                        "P4 has the highest priority but long burst time.\n" +
-                        "Priority favors P4 while RR treats all processes fairly.\n" +
-                        "Demonstrates starvation risk for low-priority processes.",
+                "One process (P1) has clearly higher priority than the rest.\n" +
+                        "In Priority Scheduling, P1 runs first and finishes quickly.\n" +
+                        "In Round Robin, P1 gets the same time slice as every other process.\n" +
+                        "This shows how Priority benefits urgent tasks that RR does not.",
                 new String[][]{
-                        {"P1","0","3","3"},
-                        {"P2","0","3","3"},
-                        {"P3","0","3","3"},
-                        {"P4","0","10","1"},
-                        {"P5","0","2","4"}
+                        {"P1", "0", "6", "1"},
+                        {"P2", "0", "4", "3"},
+                        {"P3", "0", "5", "3"},
+                        {"P4", "0", "3", "3"},
+                        {"P5", "0", "4", "3"}
                 },
                 "2"
         );
 
-        // ===== Scenario 3: Invalid Input Case =====
-        VBox s3 = new VBox(8);
-        s3.setStyle("-fx-background-color:#313244; -fx-background-radius:8;");
-        s3.setPadding(new Insets(12));
-        s3.getChildren().addAll(
-                styledText("Scenario 3 — Invalid Input Validation", "#f38ba8", 14, true),
-                styledText("Tests that the system correctly rejects invalid inputs:", "#cdd6f4", 12, false),
-                styledText("  ❌  Duplicate ID: Two processes with same ID (e.g. P1, P1)", "#f38ba8", 12, false),
-                styledText("  ❌  Invalid Burst Time: Letters instead of numbers (e.g. 'abc')", "#f38ba8", 12, false),
-                styledText("  ❌  Zero Burst Time: Burst Time = 0", "#f38ba8", 12, false),
-                styledText("  ❌  Invalid Priority: Priority = 0 or > 10", "#f38ba8", 12, false),
-                styledText("  ❌  Invalid Quantum: Quantum = 0 or negative", "#f38ba8", 12, false),
-                styledText("  ✅  All cases show clear error messages to the user.", "#a6e3a1", 12, true)
+        // ===== Scenario C: Fairness Case =====
+        VBox sC = scenarioCard(
+                "Scenario C — Fairness Case",
+                "#89b4fa",
+                "All processes arrive at the same time with equal priority\n" +
+                        "but different burst times.\n" +
+                        "Round Robin shares the CPU evenly regardless of burst length.\n" +
+                        "This shows that RR gives more balanced response times.",
+                new String[][]{
+                        {"P1", "0", "10", "2"},
+                        {"P2", "0", "2",  "2"},
+                        {"P3", "0", "5",  "2"},
+                        {"P4", "0", "8",  "2"},
+                        {"P5", "0", "3",  "2"}
+                },
+                "2"
         );
 
-        root.getChildren().addAll(s1, s2, s3);
+        // ===== Scenario D: Possible Starvation Case =====
+        VBox sD = scenarioCard(
+                "Scenario D — Possible Starvation Case",
+                "#f38ba8",
+                "Four processes share the highest priority (1).\n" +
+                        "P5 has the lowest priority (4) and the longest burst time.\n" +
+                        "In Priority Scheduling, P5 runs last and waits the longest.\n" +
+                        "Round Robin avoids this by giving P5 equal CPU slices.",
+                new String[][]{
+                        {"P1", "0", "5", "1"},
+                        {"P2", "0", "5", "1"},
+                        {"P3", "0", "5", "1"},
+                        {"P4", "0", "5", "1"},
+                        {"P5", "0", "8", "4"}
+                },
+                "3"
+        );
+
+        // ===== Scenario E: Validation Case =====
+        VBox sE = new VBox(8);
+        sE.setStyle("-fx-background-color:#313244; -fx-background-radius:8;");
+        sE.setPadding(new Insets(12));
+        sE.getChildren().addAll(
+                styledText("Scenario E — Validation Case", "#fab387", 14, true),
+                styledText("The simulator rejects the following invalid inputs:", "#cdd6f4", 12, false),
+                styledText("  -  Duplicate process ID (e.g. two processes both named P1)", "#f38ba8", 12, false),
+                styledText("  -  Non-numeric burst time (e.g. entering 'abc' instead of a number)", "#f38ba8", 12, false),
+                styledText("  -  Burst time equal to zero", "#f38ba8", 12, false),
+                styledText("  -  Priority value of zero or greater than 10", "#f38ba8", 12, false),
+                styledText("  -  Time quantum equal to zero or a negative number", "#f38ba8", 12, false),
+                styledText("  In each case, a clear error message is shown and the simulation does not run.", "#a6e3a1", 12, false)
+        );
+
+        root.getChildren().addAll(sA, sB, sC, sD, sE);
 
         ScrollPane sp = new ScrollPane(root);
         sp.setFitToWidth(true);
         sp.setStyle("-fx-background-color:#1e1e2e; -fx-background:#1e1e2e;");
+
         Scene scene = new Scene(sp, 650, 600);
         scene.getStylesheets().add(
                 getClass().getResource("/styles/main.css").toExternalForm()
